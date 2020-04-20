@@ -55,10 +55,10 @@ void main() {
   }
 
   group('getConcreteNumberTrivia', () {
-    final tNumber = 1;
-    final tNumberTriviaModel =
+    const tNumber = 1;
+    const tNumberTriviaModel =
         NumberTriviaModel(number: tNumber, text: 'test trivia');
-    final NumberTrivia tNumberTrivia = tNumberTriviaModel;
+    const NumberTrivia tNumberTrivia = tNumberTriviaModel;
 
     test(
       'should check if the device is online',
@@ -66,7 +66,7 @@ void main() {
         // arrange
         when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
         // act
-        repository.getConcreteNumberTrivia(tNumber);
+        await repository.getConcreteNumberTrivia(tNumber);
         // assert
         verify(mockNetworkInfo.isConnected);
       },
@@ -151,9 +151,9 @@ void main() {
   });
 
   group('getRandomNumberTrivia', () {
-    final tNumberTriviaModel =
+    const tNumberTriviaModel =
         NumberTriviaModel(number: 123, text: 'test trivia');
-    final NumberTrivia tNumberTrivia = tNumberTriviaModel;
+    const NumberTrivia tNumberTrivia = tNumberTriviaModel;
 
     test(
       'should check if the device is online',
@@ -161,7 +161,7 @@ void main() {
         // arrange
         when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
         // act
-        repository.getRandomNumberTrivia();
+        await repository.getRandomNumberTrivia();
         // assert
         verify(mockNetworkInfo.isConnected);
       },

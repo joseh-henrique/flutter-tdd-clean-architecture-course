@@ -12,7 +12,7 @@ class TriviaControls extends StatefulWidget {
 }
 
 class _TriviaControlsState extends State<TriviaControls> {
-  final controller = TextEditingController();
+  final TextEditingController controller = TextEditingController();
   String inputStr;
 
   @override
@@ -22,7 +22,7 @@ class _TriviaControlsState extends State<TriviaControls> {
         TextField(
           controller: controller,
           keyboardType: TextInputType.number,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             border: OutlineInputBorder(),
             hintText: 'Input a number',
           ),
@@ -33,22 +33,22 @@ class _TriviaControlsState extends State<TriviaControls> {
             dispatchConcrete();
           },
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Row(
           children: <Widget>[
             Expanded(
               child: RaisedButton(
-                child: Text('Search'),
                 color: Theme.of(context).accentColor,
                 textTheme: ButtonTextTheme.primary,
                 onPressed: dispatchConcrete,
+                child: const Text('Search'),
               ),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Expanded(
               child: RaisedButton(
-                child: Text('Get random trivia'),
                 onPressed: dispatchRandom,
+                child: const Text('Get random trivia'),
               ),
             ),
           ],

@@ -1,0 +1,95 @@
+# Copyright (c) 2019, the Dart project authors.  Please see the AUTHORS file
+# for details. All rights reserved. Use of this source code is governed by a
+# BSD-style license that can be found in the LICENSE file.
+#
+# Google internally enforced rules. See README.md for more information,
+# including a list of lints that are intentionally _not_ enforced.
+#include: package:pedantic/analysis_options.yaml
+include: package:lint/analysis_options.yaml
+
+#linter:
+  #rules:
+    # ------ Disable individual rules ----- #
+    #                 ---                   #
+    # Turn off what you don't like.         #
+    # ------------------------------------- #
+
+    # Use parameter order as in json response
+    #always_put_required_named_parameters_first: false
+    
+    # Util classes are awesome!
+    #avoid_classes_with_only_static_members: false
+
+
+    # ------ Enable individual rules ------ #
+    #                 ---                   #
+    # These rules here are good but too     #
+    # opinionated to enable them by default #
+    # ------------------------------------- #
+
+    # Make constructors the first thing in every class
+    #sort_constructors_first: true
+
+    # The new tabs vs. spaces. Choose wisely
+    #prefer_single_quotes: true
+    #prefer_double_quotes: true
+
+    # Good packages document everything
+    #ublic_member_api_docs: true
+    
+    # Blindly follow the Flutter code style, which prefers types everywhere
+    #always_specify_types: true
+  
+    # Back to the 80s
+    #lines_longer_than_80_chars: true
+    
+linter:
+  rules:
+    - parameter_assignments
+    - avoid_empty_else
+    - avoid_init_to_null
+    - avoid_relative_lib_imports
+    - avoid_return_types_on_setters
+    - avoid_shadowing_type_parameters
+    - avoid_types_as_parameter_names
+    - curly_braces_in_flow_control_structures
+    - empty_catches
+    - empty_constructor_bodies
+    - library_names
+    - library_prefixes
+    - no_duplicate_case_values
+    - null_closures
+    - prefer_contains
+    - prefer_equal_for_default_values
+    - prefer_is_empty
+    - prefer_is_not_empty
+    - recursive_getters
+    - slash_for_doc_comments
+    - type_init_formals
+    - unawaited_futures
+    - unnecessary_null_in_if_null_operators
+    - unrelated_type_equality_checks
+    - use_rethrow_when_possible
+    - valid_regexps
+
+analyzer:
+  errors:
+    missing_required_param: error
+    parameter_assignments: error
+    missing_return: error
+    invalid_assignment: warning
+    argument_type_not_assignable: warning
+    prefer_function_declarations_over_variables: ignore
+    avoid_positional_boolean_parameters: ignore
+    prefer_void_to_null: ignore
+    use_setters_to_change_properties: ignore
+    implementation_imports: ignore
+    prefer_interpolation_to_compose_strings: ignore
+    sdk_version_set_literal: ignore
+    avoid_classes_with_only_static_members: ignore
+    constant_identifier_names: ignore
+    avoid_private_typedef_functions: ignore
+    prefer_generic_function_type_aliases: ignore
+    
+    
+

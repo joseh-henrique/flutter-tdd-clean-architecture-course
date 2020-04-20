@@ -24,8 +24,8 @@ void main() {
   });
 
   group('getLastNumberTrivia', () {
-    final tNumberTriviaModel =
-        NumberTriviaModel.fromJson(json.decode(fixture('trivia_cached.json')));
+    final tNumberTriviaModel = NumberTriviaModel.fromJson(
+        json.decode(fixture('trivia_cached.json')) as Map<String, dynamic>);
 
     test(
       'should return NumberTrivia from SharedPreferences when there is one in the cache',
@@ -49,20 +49,20 @@ void main() {
         // act
         final call = dataSource.getLastNumberTrivia;
         // assert
-        expect(() => call(), throwsA(TypeMatcher<CacheException>()));
+        expect(() => call(), throwsA(const TypeMatcher<CacheException>()));
       },
     );
   });
 
   group('cacheNumberTrivia', () {
-    final tNumberTriviaModel =
+    const tNumberTriviaModel =
         NumberTriviaModel(number: 1, text: 'test trivia');
 
     test(
       'should call SharedPreferences to cache the data',
       () async {
         // act
-        dataSource.cacheNumberTrivia(tNumberTriviaModel);
+        await dataSource.cacheNumberTrivia(tNumberTriviaModel);
         // assert
         final expectedJsonString = json.encode(tNumberTriviaModel.toJson());
         verify(mockSharedPreferences.setString(

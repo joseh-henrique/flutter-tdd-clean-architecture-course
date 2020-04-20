@@ -32,9 +32,9 @@ void main() {
   }
 
   group('getConcreteNumberTrivia', () {
-    final tNumber = 1;
-    final tNumberTriviaModel =
-        NumberTriviaModel.fromJson(json.decode(fixture('trivia.json')));
+    const tNumber = 1;
+    final tNumberTriviaModel = NumberTriviaModel.fromJson(
+        json.decode(fixture('trivia.json')) as Map<String, dynamic>);
 
     test(
       '''should perform a GET request on a URL with number
@@ -43,7 +43,7 @@ void main() {
         // arrange
         setUpMockHttpClientSuccess200();
         // act
-        dataSource.getConcreteNumberTrivia(tNumber);
+        await dataSource.getConcreteNumberTrivia(tNumber);
         // assert
         verify(mockHttpClient.get(
           'http://numbersapi.com/$tNumber',
@@ -74,14 +74,15 @@ void main() {
         // act
         final call = dataSource.getConcreteNumberTrivia;
         // assert
-        expect(() => call(tNumber), throwsA(TypeMatcher<ServerException>()));
+        expect(
+            () => call(tNumber), throwsA(const TypeMatcher<ServerException>()));
       },
     );
   });
 
   group('getRandomNumberTrivia', () {
-    final tNumberTriviaModel =
-        NumberTriviaModel.fromJson(json.decode(fixture('trivia.json')));
+    final tNumberTriviaModel = NumberTriviaModel.fromJson(
+        json.decode(fixture('trivia.json')) as Map<String, dynamic>);
 
     test(
       '''should perform a GET request on a URL with number
@@ -90,7 +91,7 @@ void main() {
         // arrange
         setUpMockHttpClientSuccess200();
         // act
-        dataSource.getRandomNumberTrivia();
+        await dataSource.getRandomNumberTrivia();
         // assert
         verify(mockHttpClient.get(
           'http://numbersapi.com/random',
@@ -121,7 +122,7 @@ void main() {
         // act
         final call = dataSource.getRandomNumberTrivia;
         // assert
-        expect(() => call(), throwsA(TypeMatcher<ServerException>()));
+        expect(() => call(), throwsA(const TypeMatcher<ServerException>()));
       },
     );
   });

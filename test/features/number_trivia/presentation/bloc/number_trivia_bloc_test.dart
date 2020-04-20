@@ -40,9 +40,9 @@ void main() {
   });
 
   group('GetTriviaForConcreteNumber', () {
-    final tNumberString = '1';
-    final tNumberParsed = 1;
-    final tNumberTrivia = NumberTrivia(number: 1, text: 'test trivia');
+    const tNumberString = '1';
+    const tNumberParsed = 1;
+    const tNumberTrivia = NumberTrivia(number: 1, text: 'test trivia');
 
     void setUpMockInputConverterSuccess() =>
         when(mockInputConverter.stringToUnsignedInteger(any))
@@ -72,7 +72,7 @@ void main() {
           Empty(),
           Error(message: INVALID_INPUT_FAILURE_MESSAGE),
         ];
-        expectLater(bloc, emitsInOrder(expected));
+        await expectLater(bloc, emitsInOrder(expected));
         // act
         bloc.add(GetTriviaForConcreteNumber(tNumberString));
       },
@@ -89,7 +89,8 @@ void main() {
         bloc.add(GetTriviaForConcreteNumber(tNumberString));
         await untilCalled(mockGetConcreteNumberTrivia(any));
         // assert
-        verify(mockGetConcreteNumberTrivia(Params(number: tNumberParsed)));
+        verify(
+            mockGetConcreteNumberTrivia(const Params(number: tNumberParsed)));
       },
     );
 
@@ -106,7 +107,7 @@ void main() {
           Loading(),
           Loaded(trivia: tNumberTrivia),
         ];
-        expectLater(bloc, emitsInOrder(expected));
+        await expectLater(bloc, emitsInOrder(expected));
         // act
         bloc.add(GetTriviaForConcreteNumber(tNumberString));
       },
@@ -125,7 +126,7 @@ void main() {
           Loading(),
           Error(message: SERVER_FAILURE_MESSAGE),
         ];
-        expectLater(bloc, emitsInOrder(expected));
+        await expectLater(bloc, emitsInOrder(expected));
         // act
         bloc.add(GetTriviaForConcreteNumber(tNumberString));
       },
@@ -144,7 +145,7 @@ void main() {
           Loading(),
           Error(message: CACHE_FAILURE_MESSAGE),
         ];
-        expectLater(bloc, emitsInOrder(expected));
+        await expectLater(bloc, emitsInOrder(expected));
         // act
         bloc.add(GetTriviaForConcreteNumber(tNumberString));
       },
@@ -152,7 +153,7 @@ void main() {
   });
 
   group('GetTriviaForRandomNumber', () {
-    final tNumberTrivia = NumberTrivia(number: 1, text: 'test trivia');
+    const tNumberTrivia = NumberTrivia(number: 1, text: 'test trivia');
 
     test(
       'should get data from the random use case',
@@ -180,7 +181,7 @@ void main() {
           Loading(),
           Loaded(trivia: tNumberTrivia),
         ];
-        expectLater(bloc, emitsInOrder(expected));
+        await expectLater(bloc, emitsInOrder(expected));
         // act
         bloc.add(GetTriviaForRandomNumber());
       },
@@ -198,7 +199,7 @@ void main() {
           Loading(),
           Error(message: SERVER_FAILURE_MESSAGE),
         ];
-        expectLater(bloc, emitsInOrder(expected));
+        await expectLater(bloc, emitsInOrder(expected));
         // act
         bloc.add(GetTriviaForRandomNumber());
       },
@@ -216,7 +217,7 @@ void main() {
           Loading(),
           Error(message: CACHE_FAILURE_MESSAGE),
         ];
-        expectLater(bloc, emitsInOrder(expected));
+        await expectLater(bloc, emitsInOrder(expected));
         // act
         bloc.add(GetTriviaForRandomNumber());
       },

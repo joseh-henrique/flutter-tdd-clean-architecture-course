@@ -14,14 +14,14 @@ class GetConcreteNumberTrivia implements UseCase<NumberTrivia, Params> {
 
   @override
   Future<Either<Failure, NumberTrivia>> call(Params params) async {
-    return await repository.getConcreteNumberTrivia(params.number);
+    return repository.getConcreteNumberTrivia(params.number);
   }
 }
 
 class Params extends Equatable {
   final int number;
 
-  Params({@required this.number});
+  const Params({@required this.number});
 
   @override
   List<Object> get props => [number];

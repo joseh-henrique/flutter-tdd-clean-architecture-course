@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../../fixtures/fixture_reader.dart';
 
 void main() {
-  final tNumberTriviaModel = NumberTriviaModel(number: 1, text: 'Test Text');
+  const tNumberTriviaModel = NumberTriviaModel(number: 1, text: 'Test Text');
 
   test(
     'should be a subclass of NumberTrivia entity',
@@ -23,7 +23,7 @@ void main() {
       () async {
         // arrange
         final Map<String, dynamic> jsonMap =
-            json.decode(fixture('trivia.json'));
+            json.decode(fixture('trivia.json')) as Map<String, dynamic>;
         // act
         final result = NumberTriviaModel.fromJson(jsonMap);
         // assert
@@ -36,7 +36,7 @@ void main() {
       () async {
         // arrange
         final Map<String, dynamic> jsonMap =
-            json.decode(fixture('trivia_double.json'));
+            json.decode(fixture('trivia_double.json')) as Map<String, dynamic>;
         // act
         final result = NumberTriviaModel.fromJson(jsonMap);
         // assert

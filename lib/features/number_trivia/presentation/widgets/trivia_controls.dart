@@ -1,6 +1,7 @@
-import 'package:clean_architecture_tdd_course/features/number_trivia/presentation/bloc/bloc.dart';
+import 'package:clean_architecture_tdd_course/features/number_trivia/presentation/store/number_trivia_event.dart';
+import 'package:clean_architecture_tdd_course/features/number_trivia/presentation/store/number_trivia_store.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class TriviaControls extends StatefulWidget {
   const TriviaControls({
@@ -12,6 +13,7 @@ class TriviaControls extends StatefulWidget {
 }
 
 class _TriviaControlsState extends State<TriviaControls> {
+  NumberTriviaStore numberTriviaStore = Modular.get();
   final TextEditingController controller = TextEditingController();
   String inputStr;
 
@@ -59,12 +61,11 @@ class _TriviaControlsState extends State<TriviaControls> {
 
   void dispatchConcrete() {
     controller.clear();
-    BlocProvider.of<NumberTriviaBloc>(context)
-        .add(GetTriviaForConcreteNumber(inputStr));
+    numberTriviaStore.getErrorOrUseCase(GetTriviaForConcreteNumber(inputStr));
   }
 
   void dispatchRandom() {
     controller.clear();
-    BlocProvider.of<NumberTriviaBloc>(context).add(GetTriviaForRandomNumber());
+    numberTriviaStore.getErrorOrUseCase(GetTriviaForRandomNumber());
   }
 }

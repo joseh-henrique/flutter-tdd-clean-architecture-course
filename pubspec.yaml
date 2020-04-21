@@ -6,6 +6,11 @@ version: 1.0.0+1
 environment:
   sdk: '>=2.6.0 <3.0.0'
 
+scripts:
+  build: "flutter pub run build_runner build --delete-conflicting-outputs"
+  clean: "flutter pub run build_runner clean"
+  watch: "flutter pub run build_runner watch" 
+
 dependencies:
   flutter:
     sdk: flutter
@@ -26,6 +31,7 @@ dependencies:
   flutter_modular: ^1.1.2
   mobx: ^1.1.1
   flutter_mobx: ^1.1.0
+  
 
 dev_dependencies:
   flutter_test:

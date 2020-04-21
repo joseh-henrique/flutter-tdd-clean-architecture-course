@@ -1,13 +1,14 @@
-import 'package:clean_architecture_tdd_course/core/error/failures.dart';
-import 'package:clean_architecture_tdd_course/core/usecases/usecase.dart';
 import 'package:clean_architecture_tdd_course/core/util/input_converter.dart';
+import 'package:clean_architecture_tdd_course/core/usecases/usecase.dart';
+import 'package:clean_architecture_tdd_course/core/error/failures.dart';
 import 'package:clean_architecture_tdd_course/features/number_trivia/domain/entities/number_trivia.dart';
 import 'package:clean_architecture_tdd_course/features/number_trivia/domain/usecases/get_concrete_number_trivia.dart';
 import 'package:clean_architecture_tdd_course/features/number_trivia/domain/usecases/get_random_number_trivia.dart';
-import 'package:clean_architecture_tdd_course/features/number_trivia/presentation/bloc/bloc.dart';
+import 'package:clean_architecture_tdd_course/features/number_trivia/presentation/store/number_trivia_event.dart';
+import 'package:clean_architecture_tdd_course/features/number_trivia/presentation/store/number_trivia_store.dart';
 import 'package:dartz/dartz.dart';
-import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 
 class MockGetConcreteNumberTrivia extends Mock
     implements GetConcreteNumberTrivia {}
@@ -17,7 +18,7 @@ class MockGetRandomNumberTrivia extends Mock implements GetRandomNumberTrivia {}
 class MockInputConverter extends Mock implements InputConverter {}
 
 void main() {
-  NumberTriviaBloc bloc;
+  NumberTriviaStore store;
   MockGetConcreteNumberTrivia mockGetConcreteNumberTrivia;
   MockGetRandomNumberTrivia mockGetRandomNumberTrivia;
   MockInputConverter mockInputConverter;
@@ -27,7 +28,7 @@ void main() {
     mockGetRandomNumberTrivia = MockGetRandomNumberTrivia();
     mockInputConverter = MockInputConverter();
 
-    bloc = NumberTriviaBloc(
+    store = NumberTriviaStore(
       concrete: mockGetConcreteNumberTrivia,
       random: mockGetRandomNumberTrivia,
       inputConverter: mockInputConverter,
@@ -36,7 +37,7 @@ void main() {
 
   test('initialState should be Empty', () {
     // assert
-    expect(bloc.initialState, equals(Empty()));
+    expect(store.emptyState, equals(true));
   });
 
   group('GetTriviaForConcreteNumber', () {
@@ -53,28 +54,31 @@ void main() {
       () async {
         // arrange
         setUpMockInputConverterSuccess();
+        when(mockGetConcreteNumberTrivia(any))
+            .thenAnswer((_) async => Right(tNumberTrivia));
+
         // act
-        bloc.add(GetTriviaForConcreteNumber(tNumberString));
-        await untilCalled(mockInputConverter.stringToUnsignedInteger(any));
+        await store
+            .getErrorOrUseCase(GetTriviaForConcreteNumber(tNumberString));
+
         // assert
         verify(mockInputConverter.stringToUnsignedInteger(tNumberString));
       },
     );
 
     test(
-      'should emit [Error] when the input is invalid',
+      'should emit error message when the input is invalid',
       () async {
         // arrange
         when(mockInputConverter.stringToUnsignedInteger(any))
             .thenReturn(Left(InvalidInputFailure()));
-        // assert later
-        final expected = [
-          Empty(),
-          Error(message: INVALID_INPUT_FAILURE_MESSAGE),
-        ];
-        await expectLater(bloc, emitsInOrder(expected));
-        // act
-        bloc.add(GetTriviaForConcreteNumber(tNumberString));
+
+        //act
+        await store
+            .getErrorOrUseCase(GetTriviaForConcreteNumber(tNumberString));
+
+        // assert
+        expect(store.errorMessage, INVALID_INPUT_FAILURE_MESSAGE);
       },
     );
 
@@ -86,7 +90,8 @@ void main() {
         when(mockGetConcreteNumberTrivia(any))
             .thenAnswer((_) async => Right(tNumberTrivia));
         // act
-        bloc.add(GetTriviaForConcreteNumber(tNumberString));
+        await store
+            .getErrorOrUseCase(GetTriviaForConcreteNumber(tNumberString));
         await untilCalled(mockGetConcreteNumberTrivia(any));
         // assert
         verify(
@@ -95,40 +100,32 @@ void main() {
     );
 
     test(
-      'should emit [Loading, Loaded] when data is gotten successfully',
+      'should emit correct trivia when data is gotten successfully',
       () async {
         // arrange
         setUpMockInputConverterSuccess();
         when(mockGetConcreteNumberTrivia(any))
             .thenAnswer((_) async => Right(tNumberTrivia));
-        // assert later
-        final expected = [
-          Empty(),
-          Loading(),
-          Loaded(trivia: tNumberTrivia),
-        ];
-        await expectLater(bloc, emitsInOrder(expected));
-        // act
-        bloc.add(GetTriviaForConcreteNumber(tNumberString));
+
+        await store
+            .getErrorOrUseCase(GetTriviaForConcreteNumber(tNumberString));
+
+        expect(store.trivia, tNumberTrivia);
       },
     );
 
     test(
-      'should emit [Loading, Error] when getting data fails',
+      'should emit error when getting data fails',
       () async {
         // arrange
         setUpMockInputConverterSuccess();
         when(mockGetConcreteNumberTrivia(any))
             .thenAnswer((_) async => Left(ServerFailure()));
-        // assert later
-        final expected = [
-          Empty(),
-          Loading(),
-          Error(message: SERVER_FAILURE_MESSAGE),
-        ];
-        await expectLater(bloc, emitsInOrder(expected));
+
         // act
-        bloc.add(GetTriviaForConcreteNumber(tNumberString));
+        await store
+            .getErrorOrUseCase(GetTriviaForConcreteNumber(tNumberString));
+        expect(store.errorMessage, SERVER_FAILURE_MESSAGE);
       },
     );
 
@@ -139,15 +136,11 @@ void main() {
         setUpMockInputConverterSuccess();
         when(mockGetConcreteNumberTrivia(any))
             .thenAnswer((_) async => Left(CacheFailure()));
-        // assert later
-        final expected = [
-          Empty(),
-          Loading(),
-          Error(message: CACHE_FAILURE_MESSAGE),
-        ];
-        await expectLater(bloc, emitsInOrder(expected));
+
         // act
-        bloc.add(GetTriviaForConcreteNumber(tNumberString));
+        await store
+            .getErrorOrUseCase(GetTriviaForConcreteNumber(tNumberString));
+        expect(store.errorMessage, CACHE_FAILURE_MESSAGE);
       },
     );
   });
@@ -162,7 +155,8 @@ void main() {
         when(mockGetRandomNumberTrivia(any))
             .thenAnswer((_) async => Right(tNumberTrivia));
         // act
-        bloc.add(GetTriviaForRandomNumber());
+        await store.getErrorOrUseCase(GetTriviaForRandomNumber());
+
         await untilCalled(mockGetRandomNumberTrivia(any));
         // assert
         verify(mockGetRandomNumberTrivia(NoParams()));
@@ -175,15 +169,9 @@ void main() {
         // arrange
         when(mockGetRandomNumberTrivia(any))
             .thenAnswer((_) async => Right(tNumberTrivia));
-        // assert later
-        final expected = [
-          Empty(),
-          Loading(),
-          Loaded(trivia: tNumberTrivia),
-        ];
-        await expectLater(bloc, emitsInOrder(expected));
-        // act
-        bloc.add(GetTriviaForRandomNumber());
+
+        await store.getErrorOrUseCase(GetTriviaForRandomNumber());
+        expect(store.trivia, tNumberTrivia);
       },
     );
 
@@ -193,15 +181,9 @@ void main() {
         // arrange
         when(mockGetRandomNumberTrivia(any))
             .thenAnswer((_) async => Left(ServerFailure()));
-        // assert later
-        final expected = [
-          Empty(),
-          Loading(),
-          Error(message: SERVER_FAILURE_MESSAGE),
-        ];
-        await expectLater(bloc, emitsInOrder(expected));
-        // act
-        bloc.add(GetTriviaForRandomNumber());
+
+        await store.getErrorOrUseCase(GetTriviaForRandomNumber());
+        expect(store.errorMessage, SERVER_FAILURE_MESSAGE);
       },
     );
 
@@ -212,14 +194,9 @@ void main() {
         when(mockGetRandomNumberTrivia(any))
             .thenAnswer((_) async => Left(CacheFailure()));
         // assert later
-        final expected = [
-          Empty(),
-          Loading(),
-          Error(message: CACHE_FAILURE_MESSAGE),
-        ];
-        await expectLater(bloc, emitsInOrder(expected));
-        // act
-        bloc.add(GetTriviaForRandomNumber());
+
+        await store.getErrorOrUseCase(GetTriviaForRandomNumber());
+        expect(store.errorMessage, CACHE_FAILURE_MESSAGE);
       },
     );
   });

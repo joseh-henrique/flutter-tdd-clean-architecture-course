@@ -2,7 +2,8 @@ import 'dart:convert';
 
 import 'package:clean_architecture_tdd_course/core/error/exceptions.dart';
 import 'package:clean_architecture_tdd_course/features/number_trivia/data/datasources/number_trivia_local_data_source.dart';
-import 'package:clean_architecture_tdd_course/features/number_trivia/data/models/number_trivia_model.dart';
+import 'package:clean_architecture_tdd_course/features/number_trivia/data/dtos/number_trivia_dto.dart';
+
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,7 +25,7 @@ void main() {
   });
 
   group('getLastNumberTrivia', () {
-    final tNumberTriviaModel = NumberTriviaModel.fromJson(
+    final tNumberTriviaModel = NumberTriviaDTO.fromJsonParsingInt(
         json.decode(fixture('trivia_cached.json')) as Map<String, dynamic>);
 
     test(
@@ -55,8 +56,7 @@ void main() {
   });
 
   group('cacheNumberTrivia', () {
-    const tNumberTriviaModel =
-        NumberTriviaModel(number: 1, text: 'test trivia');
+    const tNumberTriviaModel = NumberTriviaDTO(number: 1, text: 'test trivia');
 
     test(
       'should call SharedPreferences to cache the data',

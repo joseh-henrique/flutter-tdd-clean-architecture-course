@@ -58,8 +58,8 @@ void main() {
             .thenAnswer((_) async => Right(tNumberTrivia));
 
         // act
-        await store
-            .getErrorOrUseCase(GetTriviaForConcreteNumber(tNumberString));
+        await store.getErrorOrUseCase(
+            const GetTriviaForConcreteNumber(numberString: tNumberString));
 
         // assert
         verify(mockInputConverter.stringToUnsignedInteger(tNumberString));
@@ -71,11 +71,11 @@ void main() {
       () async {
         // arrange
         when(mockInputConverter.stringToUnsignedInteger(any))
-            .thenReturn(Left(InvalidInputFailure()));
+            .thenReturn(Left(const InvalidInputFailure()));
 
         //act
-        await store
-            .getErrorOrUseCase(GetTriviaForConcreteNumber(tNumberString));
+        await store.getErrorOrUseCase(
+            const GetTriviaForConcreteNumber(numberString: tNumberString));
 
         // assert
         expect(store.errorMessage, INVALID_INPUT_FAILURE_MESSAGE);
@@ -90,8 +90,8 @@ void main() {
         when(mockGetConcreteNumberTrivia(any))
             .thenAnswer((_) async => Right(tNumberTrivia));
         // act
-        await store
-            .getErrorOrUseCase(GetTriviaForConcreteNumber(tNumberString));
+        await store.getErrorOrUseCase(
+            const GetTriviaForConcreteNumber(numberString: tNumberString));
         await untilCalled(mockGetConcreteNumberTrivia(any));
         // assert
         verify(
@@ -107,8 +107,8 @@ void main() {
         when(mockGetConcreteNumberTrivia(any))
             .thenAnswer((_) async => Right(tNumberTrivia));
 
-        await store
-            .getErrorOrUseCase(GetTriviaForConcreteNumber(tNumberString));
+        await store.getErrorOrUseCase(
+            const GetTriviaForConcreteNumber(numberString: tNumberString));
 
         expect(store.trivia, tNumberTrivia);
       },
@@ -120,26 +120,26 @@ void main() {
         // arrange
         setUpMockInputConverterSuccess();
         when(mockGetConcreteNumberTrivia(any))
-            .thenAnswer((_) async => Left(ServerFailure()));
+            .thenAnswer((_) async => Left(const ServerFailure()));
 
         // act
-        await store
-            .getErrorOrUseCase(GetTriviaForConcreteNumber(tNumberString));
+        await store.getErrorOrUseCase(
+            const GetTriviaForConcreteNumber(numberString: tNumberString));
         expect(store.errorMessage, SERVER_FAILURE_MESSAGE);
       },
     );
 
     test(
-      'should emit [Loading, Error] with a proper message for the error when getting data fails',
+      'should emit error with a proper message for the error when getting data fails',
       () async {
         // arrange
         setUpMockInputConverterSuccess();
         when(mockGetConcreteNumberTrivia(any))
-            .thenAnswer((_) async => Left(CacheFailure()));
+            .thenAnswer((_) async => Left(const CacheFailure()));
 
         // act
-        await store
-            .getErrorOrUseCase(GetTriviaForConcreteNumber(tNumberString));
+        await store.getErrorOrUseCase(
+            const GetTriviaForConcreteNumber(numberString: tNumberString));
         expect(store.errorMessage, CACHE_FAILURE_MESSAGE);
       },
     );
@@ -155,47 +155,47 @@ void main() {
         when(mockGetRandomNumberTrivia(any))
             .thenAnswer((_) async => Right(tNumberTrivia));
         // act
-        await store.getErrorOrUseCase(GetTriviaForRandomNumber());
+        await store.getErrorOrUseCase(const GetTriviaForRandomNumber());
 
         await untilCalled(mockGetRandomNumberTrivia(any));
         // assert
-        verify(mockGetRandomNumberTrivia(NoParams()));
+        verify(mockGetRandomNumberTrivia(any));
       },
     );
 
     test(
-      'should emit [Loading, Loaded] when data is gotten successfully',
+      'should emit correct NumberTrivia when data is gotten successfully',
       () async {
         // arrange
         when(mockGetRandomNumberTrivia(any))
             .thenAnswer((_) async => Right(tNumberTrivia));
 
-        await store.getErrorOrUseCase(GetTriviaForRandomNumber());
+        await store.getErrorOrUseCase(const GetTriviaForRandomNumber());
         expect(store.trivia, tNumberTrivia);
       },
     );
 
     test(
-      'should emit [Loading, Error] when getting data fails',
+      'should emit correct error when getting data fails',
       () async {
         // arrange
         when(mockGetRandomNumberTrivia(any))
-            .thenAnswer((_) async => Left(ServerFailure()));
+            .thenAnswer((_) async => Left(const ServerFailure()));
 
-        await store.getErrorOrUseCase(GetTriviaForRandomNumber());
+        await store.getErrorOrUseCase(const GetTriviaForRandomNumber());
         expect(store.errorMessage, SERVER_FAILURE_MESSAGE);
       },
     );
 
     test(
-      'should emit [Loading, Error] with a proper message for the error when getting data fails',
+      'should emit correct error with a proper message for the error when getting data fails',
       () async {
         // arrange
         when(mockGetRandomNumberTrivia(any))
-            .thenAnswer((_) async => Left(CacheFailure()));
+            .thenAnswer((_) async => Left(const CacheFailure()));
         // assert later
 
-        await store.getErrorOrUseCase(GetTriviaForRandomNumber());
+        await store.getErrorOrUseCase(const GetTriviaForRandomNumber());
         expect(store.errorMessage, CACHE_FAILURE_MESSAGE);
       },
     );

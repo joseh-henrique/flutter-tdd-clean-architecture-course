@@ -61,11 +61,12 @@ class _TriviaControlsState extends State<TriviaControls> {
 
   void dispatchConcrete() {
     controller.clear();
-    numberTriviaStore.getErrorOrUseCase(GetTriviaForConcreteNumber(inputStr));
+    numberTriviaStore
+        .getErrorOrUseCase(GetTriviaForConcreteNumber(numberString: inputStr));
   }
 
   void dispatchRandom() {
     controller.clear();
-    numberTriviaStore.getErrorOrUseCase(GetTriviaForRandomNumber());
+    numberTriviaStore.getErrorOrUseCase(const GetTriviaForRandomNumber());
   }
 }

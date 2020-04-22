@@ -2,7 +2,8 @@ import 'dart:convert';
 
 import 'package:clean_architecture_tdd_course/core/error/exceptions.dart';
 import 'package:clean_architecture_tdd_course/features/number_trivia/data/datasources/number_trivia_remote_data_source.dart';
-import 'package:clean_architecture_tdd_course/features/number_trivia/data/models/number_trivia_model.dart';
+import 'package:clean_architecture_tdd_course/features/number_trivia/data/dtos/number_trivia_dto.dart';
+
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:matcher/matcher.dart';
@@ -33,7 +34,7 @@ void main() {
 
   group('getConcreteNumberTrivia', () {
     const tNumber = 1;
-    final tNumberTriviaModel = NumberTriviaModel.fromJson(
+    final tNumberTriviaModel = NumberTriviaDTO.fromJsonParsingInt(
         json.decode(fixture('trivia.json')) as Map<String, dynamic>);
 
     test(
@@ -81,7 +82,7 @@ void main() {
   });
 
   group('getRandomNumberTrivia', () {
-    final tNumberTriviaModel = NumberTriviaModel.fromJson(
+    final tNumberTriviaModel = NumberTriviaDTO.fromJsonParsingInt(
         json.decode(fixture('trivia.json')) as Map<String, dynamic>);
 
     test(

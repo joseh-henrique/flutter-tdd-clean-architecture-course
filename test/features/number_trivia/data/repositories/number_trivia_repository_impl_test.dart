@@ -3,7 +3,8 @@ import 'package:clean_architecture_tdd_course/core/error/failures.dart';
 import 'package:clean_architecture_tdd_course/core/network/network_info.dart';
 import 'package:clean_architecture_tdd_course/features/number_trivia/data/datasources/number_trivia_local_data_source.dart';
 import 'package:clean_architecture_tdd_course/features/number_trivia/data/datasources/number_trivia_remote_data_source.dart';
-import 'package:clean_architecture_tdd_course/features/number_trivia/data/models/number_trivia_model.dart';
+import 'package:clean_architecture_tdd_course/features/number_trivia/data/dtos/number_trivia_dto.dart';
+
 import 'package:clean_architecture_tdd_course/features/number_trivia/data/repositories/number_trivia_repository_impl.dart';
 import 'package:clean_architecture_tdd_course/features/number_trivia/domain/entities/number_trivia.dart';
 import 'package:dartz/dartz.dart';
@@ -57,14 +58,17 @@ void main() {
   group('getConcreteNumberTrivia', () {
     const tNumber = 1;
     const tNumberTriviaModel =
-        NumberTriviaModel(number: tNumber, text: 'test trivia');
-    const NumberTrivia tNumberTrivia = tNumberTriviaModel;
+        NumberTriviaDTO(number: tNumber, text: 'test trivia');
+    final NumberTrivia tNumberTrivia = tNumberTriviaModel.toDomain();
 
     test(
       'should check if the device is online',
       () async {
         // arrange
         when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        when(mockRemoteDataSource.getConcreteNumberTrivia(any))
+            .thenAnswer((_) async => tNumberTriviaModel);
+
         // act
         await repository.getConcreteNumberTrivia(tNumber);
         // assert
@@ -112,7 +116,7 @@ void main() {
           // assert
           verify(mockRemoteDataSource.getConcreteNumberTrivia(tNumber));
           verifyZeroInteractions(mockLocalDataSource);
-          expect(result, equals(Left(ServerFailure())));
+          expect(result, equals(Left(const ServerFailure())));
         },
       );
     });
@@ -144,7 +148,7 @@ void main() {
           // assert
           verifyZeroInteractions(mockRemoteDataSource);
           verify(mockLocalDataSource.getLastNumberTrivia());
-          expect(result, equals(Left(CacheFailure())));
+          expect(result, equals(Left(const CacheFailure())));
         },
       );
     });
@@ -152,14 +156,16 @@ void main() {
 
   group('getRandomNumberTrivia', () {
     const tNumberTriviaModel =
-        NumberTriviaModel(number: 123, text: 'test trivia');
-    const NumberTrivia tNumberTrivia = tNumberTriviaModel;
+        NumberTriviaDTO(number: 123, text: 'test trivia');
+    final NumberTrivia tNumberTrivia = tNumberTriviaModel.toDomain();
 
     test(
       'should check if the device is online',
       () async {
         // arrange
         when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        when(mockRemoteDataSource.getRandomNumberTrivia())
+            .thenAnswer((_) async => tNumberTriviaModel);
         // act
         await repository.getRandomNumberTrivia();
         // assert
@@ -207,7 +213,7 @@ void main() {
           // assert
           verify(mockRemoteDataSource.getRandomNumberTrivia());
           verifyZeroInteractions(mockLocalDataSource);
-          expect(result, equals(Left(ServerFailure())));
+          expect(result, equals(Left(const ServerFailure())));
         },
       );
     });
@@ -239,7 +245,7 @@ void main() {
           // assert
           verifyZeroInteractions(mockRemoteDataSource);
           verify(mockLocalDataSource.getLastNumberTrivia());
-          expect(result, equals(Left(CacheFailure())));
+          expect(result, equals(Left(const CacheFailure())));
         },
       );
     });

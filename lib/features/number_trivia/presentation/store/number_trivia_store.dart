@@ -53,12 +53,17 @@ abstract class _NumberTriviaStoreBase with Store {
   Future<void> getErrorOrUseCase(NumberTriviaEvent event) async {
     _clearErrorMessage();
     _startLoading();
-    if (event is GetTriviaForConcreteNumber) {
-      await getConcreteNumberTriviaOrError(event);
-    } else if (event is GetTriviaForRandomNumber) {
-      final failureOrTrivia = await getRandomNumberTrivia(NoParams());
-      _eitherLoadedOrErrorState(failureOrTrivia);
-    }
+
+    await event.map(
+      getTriviaForConcreteNumber: (e) async {
+        await getConcreteNumberTriviaOrError(e);
+      },
+      getTriviaForRandomNumber: (e) async {
+        final failureOrTrivia = await getRandomNumberTrivia(NoParams());
+        _eitherLoadedOrErrorState(failureOrTrivia);
+      },
+    );
+
     _finishLoading();
   }
 
@@ -97,21 +102,17 @@ abstract class _NumberTriviaStoreBase with Store {
 
   @action
   void _eitherLoadedOrErrorState(
-      Either<Failure, NumberTrivia> failureOrTrivia) {
+      Either<GeneralFailure, NumberTrivia> failureOrTrivia) {
     failureOrTrivia.fold(
       (failure) => errorMessage = _mapFailureToMessage(failure),
       (triviaFetched) => trivia = triviaFetched,
     );
   }
 
-  String _mapFailureToMessage(Failure failure) {
-    switch (failure.runtimeType) {
-      case ServerFailure:
-        return SERVER_FAILURE_MESSAGE;
-      case CacheFailure:
-        return CACHE_FAILURE_MESSAGE;
-      default:
-        return 'Unexpected error';
-    }
+  String _mapFailureToMessage(GeneralFailure failure) {
+    return failure.map(
+      serverFailure: (_) => SERVER_FAILURE_MESSAGE,
+      cacheFailure: (_) => CACHE_FAILURE_MESSAGE,
+    );
   }
 }

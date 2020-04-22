@@ -1,19 +1,12 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:meta/meta.dart';
 
-@immutable
-abstract class NumberTriviaEvent extends Equatable {
-  @override
-  List<Object> get props => [];
+part 'number_trivia_event.freezed.dart';
+
+@freezed
+abstract class NumberTriviaEvent with _$NumberTriviaEvent {
+  const factory NumberTriviaEvent.getTriviaForConcreteNumber(
+      {final String numberString}) = GetTriviaForConcreteNumber;
+  const factory NumberTriviaEvent.getTriviaForRandomNumber() =
+      GetTriviaForRandomNumber;
 }
-
-class GetTriviaForConcreteNumber extends NumberTriviaEvent {
-  final String numberString;
-
-  GetTriviaForConcreteNumber(this.numberString);
-
-  @override
-  List<Object> get props => [numberString];
-}
-
-class GetTriviaForRandomNumber extends NumberTriviaEvent {}

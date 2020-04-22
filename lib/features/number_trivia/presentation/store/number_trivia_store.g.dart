@@ -124,7 +124,7 @@ mixin _$NumberTriviaStore on _NumberTriviaStoreBase, Store {
 
   @override
   void _eitherLoadedOrErrorState(
-      Either<Failure, NumberTrivia> failureOrTrivia) {
+      Either<GeneralFailure, NumberTrivia> failureOrTrivia) {
     final _$actionInfo = _$_NumberTriviaStoreBaseActionController.startAction();
     try {
       return super._eitherLoadedOrErrorState(failureOrTrivia);

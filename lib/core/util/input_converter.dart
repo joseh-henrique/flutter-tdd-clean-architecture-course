@@ -1,16 +1,21 @@
-import 'package:clean_architecture_tdd_course/core/error/failures.dart';
 import 'package:dartz/dartz.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'input_converter.freezed.dart';
 
 class InputConverter {
-  Either<Failure, int> stringToUnsignedInteger(String str) {
+  Either<InputFailure, int> stringToUnsignedInteger(String str) {
     try {
       final integer = int.parse(str);
       if (integer < 0) throw const FormatException();
       return Right(integer);
     } on FormatException {
-      return Left(InvalidInputFailure());
+      return Left(const InvalidInputFailure());
     }
   }
 }
 
-class InvalidInputFailure extends Failure {}
+@freezed
+abstract class InputFailure with _$InputFailure {
+  const factory InputFailure.invalidInputFailure() = InvalidInputFailure;
+}

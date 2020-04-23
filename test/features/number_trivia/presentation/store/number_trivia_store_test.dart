@@ -1,7 +1,7 @@
-import 'package:clean_architecture_tdd_course/core/util/input_converter.dart';
-import 'package:clean_architecture_tdd_course/core/usecases/usecase.dart';
 import 'package:clean_architecture_tdd_course/core/error/failures.dart';
+import 'package:clean_architecture_tdd_course/core/util/input_converter.dart';
 import 'package:clean_architecture_tdd_course/features/number_trivia/domain/entities/number_trivia.dart';
+import 'package:clean_architecture_tdd_course/features/number_trivia/domain/entities/value_objects.dart';
 import 'package:clean_architecture_tdd_course/features/number_trivia/domain/usecases/get_concrete_number_trivia.dart';
 import 'package:clean_architecture_tdd_course/features/number_trivia/domain/usecases/get_random_number_trivia.dart';
 import 'package:clean_architecture_tdd_course/features/number_trivia/presentation/store/number_trivia_event.dart';
@@ -43,7 +43,8 @@ void main() {
   group('GetTriviaForConcreteNumber', () {
     const tNumberString = '1';
     const tNumberParsed = 1;
-    const tNumberTrivia = NumberTrivia(number: 1, text: 'test trivia');
+    final tNumberTrivia =
+        NumberTrivia(number: TriviaNumber(tNumberString), text: 'test trivia');
 
     void setUpMockInputConverterSuccess() =>
         when(mockInputConverter.stringToUnsignedInteger(any))
@@ -146,7 +147,8 @@ void main() {
   });
 
   group('GetTriviaForRandomNumber', () {
-    const tNumberTrivia = NumberTrivia(number: 1, text: 'test trivia');
+    final tNumberTrivia =
+        NumberTrivia(number: TriviaNumber('1'), text: 'test trivia');
 
     test(
       'should get data from the random use case',

@@ -12,7 +12,7 @@ T _$identity<T>(T value) => value;
 class _$NumberTriviaTearOff {
   const _$NumberTriviaTearOff();
 
-  _NumberTrivia call({@required String text, @required int number}) {
+  _NumberTrivia call({@required String text, @required TriviaNumber number}) {
     return _NumberTrivia(
       text: text,
       number: number,
@@ -25,7 +25,7 @@ const $NumberTrivia = _$NumberTriviaTearOff();
 
 mixin _$NumberTrivia {
   String get text;
-  int get number;
+  TriviaNumber get number;
 
   $NumberTriviaCopyWith<NumberTrivia> get copyWith;
 }
@@ -34,7 +34,7 @@ abstract class $NumberTriviaCopyWith<$Res> {
   factory $NumberTriviaCopyWith(
           NumberTrivia value, $Res Function(NumberTrivia) then) =
       _$NumberTriviaCopyWithImpl<$Res>;
-  $Res call({String text, int number});
+  $Res call({String text, TriviaNumber number});
 }
 
 class _$NumberTriviaCopyWithImpl<$Res> implements $NumberTriviaCopyWith<$Res> {
@@ -51,7 +51,7 @@ class _$NumberTriviaCopyWithImpl<$Res> implements $NumberTriviaCopyWith<$Res> {
   }) {
     return _then(_value.copyWith(
       text: text == freezed ? _value.text : text as String,
-      number: number == freezed ? _value.number : number as int,
+      number: number == freezed ? _value.number : number as TriviaNumber,
     ));
   }
 }
@@ -62,7 +62,7 @@ abstract class _$NumberTriviaCopyWith<$Res>
           _NumberTrivia value, $Res Function(_NumberTrivia) then) =
       __$NumberTriviaCopyWithImpl<$Res>;
   @override
-  $Res call({String text, int number});
+  $Res call({String text, TriviaNumber number});
 }
 
 class __$NumberTriviaCopyWithImpl<$Res> extends _$NumberTriviaCopyWithImpl<$Res>
@@ -81,7 +81,7 @@ class __$NumberTriviaCopyWithImpl<$Res> extends _$NumberTriviaCopyWithImpl<$Res>
   }) {
     return _then(_NumberTrivia(
       text: text == freezed ? _value.text : text as String,
-      number: number == freezed ? _value.number : number as int,
+      number: number == freezed ? _value.number : number as TriviaNumber,
     ));
   }
 }
@@ -94,7 +94,7 @@ class _$_NumberTrivia implements _NumberTrivia {
   @override
   final String text;
   @override
-  final int number;
+  final TriviaNumber number;
 
   @override
   String toString() {
@@ -123,13 +123,13 @@ class _$_NumberTrivia implements _NumberTrivia {
 }
 
 abstract class _NumberTrivia implements NumberTrivia {
-  const factory _NumberTrivia({@required String text, @required int number}) =
-      _$_NumberTrivia;
+  const factory _NumberTrivia(
+      {@required String text, @required TriviaNumber number}) = _$_NumberTrivia;
 
   @override
   String get text;
   @override
-  int get number;
+  TriviaNumber get number;
   @override
   _$NumberTriviaCopyWith<_NumberTrivia> get copyWith;
 }

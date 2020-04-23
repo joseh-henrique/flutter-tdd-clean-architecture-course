@@ -1,5 +1,6 @@
 import 'package:clean_architecture_tdd_course/core/usecases/usecase.dart';
 import 'package:clean_architecture_tdd_course/features/number_trivia/domain/entities/number_trivia.dart';
+import 'package:clean_architecture_tdd_course/features/number_trivia/domain/entities/value_objects.dart';
 import 'package:clean_architecture_tdd_course/features/number_trivia/domain/repositories/number_trivia_repository.dart';
 import 'package:clean_architecture_tdd_course/features/number_trivia/domain/usecases/get_random_number_trivia.dart';
 import 'package:dartz/dartz.dart';
@@ -18,7 +19,7 @@ void main() {
     usecase = GetRandomNumberTrivia(mockNumberTriviaRepository);
   });
 
-  const tNumberTrivia = NumberTrivia(number: 1, text: 'test');
+  final tNumberTrivia = NumberTrivia(number: TriviaNumber('1'), text: 'test');
 
   test(
     'should get trivia from the repository',

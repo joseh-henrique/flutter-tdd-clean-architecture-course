@@ -1,3 +1,4 @@
+import 'package:clean_architecture_tdd_course/features/number_trivia/domain/entities/value_objects.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:meta/meta.dart';
 
@@ -26,7 +27,7 @@ abstract class NumberTriviaDTO with _$NumberTriviaDTO {
   factory NumberTriviaDTO.fromDomain(NumberTrivia numberTrivia) {
     return NumberTriviaDTO(
       text: numberTrivia.text,
-      number: numberTrivia.number,
+      number: numberTrivia.number.getOrCrash(),
     );
   }
 }
@@ -35,7 +36,7 @@ extension NumberTriviaDTOX on NumberTriviaDTO {
   NumberTrivia toDomain() {
     return NumberTrivia(
       text: text,
-      number: number,
+      number: TriviaNumber(number.toString()),
     );
   }
 }

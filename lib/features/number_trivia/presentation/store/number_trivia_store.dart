@@ -1,3 +1,4 @@
+import 'package:clean_architecture_tdd_course/features/number_trivia/domain/entities/value_objects.dart';
 import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 import 'package:mobx/mobx.dart';
@@ -35,16 +36,16 @@ abstract class _NumberTriviaStoreBase with Store {
         getRandomNumberTrivia = random;
 
   @observable
-  NumberTrivia trivia;
+  NumberTrivia trivia = NumberTrivia.empty();
 
   @observable
   String errorMessage;
 
   @observable
-  bool loadingState = false;
+  bool loadingState;
 
   @computed
-  bool get emptyState => trivia == null && !errorState;
+  bool get emptyState => loadingState == null && !errorState;
 
   @computed
   bool get errorState => errorMessage != null && errorMessage.isNotEmpty;
@@ -80,6 +81,11 @@ abstract class _NumberTriviaStoreBase with Store {
   @action
   void _finishLoading() {
     loadingState = false;
+  }
+
+  @action
+  void changeNumberTriviaInput(String input) {
+    trivia = trivia.copyWith(number: TriviaNumber(input));
   }
 
   @action

@@ -123,6 +123,16 @@ mixin _$NumberTriviaStore on _NumberTriviaStoreBase, Store {
   }
 
   @override
+  void changeNumberTriviaInput(String input) {
+    final _$actionInfo = _$_NumberTriviaStoreBaseActionController.startAction();
+    try {
+      return super.changeNumberTriviaInput(input);
+    } finally {
+      _$_NumberTriviaStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void _eitherLoadedOrErrorState(
       Either<GeneralFailure, NumberTrivia> failureOrTrivia) {
     final _$actionInfo = _$_NumberTriviaStoreBaseActionController.startAction();

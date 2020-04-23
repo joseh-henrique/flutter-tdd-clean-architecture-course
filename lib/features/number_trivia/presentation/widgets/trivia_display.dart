@@ -16,7 +16,7 @@ class TriviaDisplay extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Text(
-            numberTrivia.number.toString(),
+            numberTrivia.number.getOrCrash().toString(),
             style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
           ),
           Expanded(

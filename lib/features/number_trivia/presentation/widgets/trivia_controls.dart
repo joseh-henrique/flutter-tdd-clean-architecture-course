@@ -70,3 +70,69 @@ class _TriviaControlsState extends State<TriviaControls> {
     numberTriviaStore.getErrorOrUseCase(const GetTriviaForRandomNumber());
   }
 }
+
+/* 
+Use in case of dynamic changing as in a todo list
+
+class _TriviaControlsState extends State<TriviaControls> {
+  NumberTriviaStore numberTriviaStore = Modular.get();
+  final TextEditingController controller = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Form(
+          autovalidate: true,
+          child: TextFormField(
+            controller: controller,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: 'Input a number',
+            ),
+            onChanged: numberTriviaStore.changeNumberTriviaInput,
+            validator: (_) => numberTriviaStore.trivia.number.value
+                .fold((f) => "Número inválido", (r) => null),
+            
+          ),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: RaisedButton(
+                color: Theme.of(context).accentColor,
+                textTheme: ButtonTextTheme.primary,
+                onPressed: dispatchConcreteIfValid,
+                child: const Text('Search'),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: RaisedButton(
+                onPressed: dispatchRandom,
+                child: const Text('Get random trivia'),
+              ),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
+  void dispatchConcreteIfValid() {
+    if (numberTriviaStore.trivia.isValid()) {
+      controller.clear();
+      numberTriviaStore.getErrorOrUseCase(GetTriviaForConcreteNumber(
+          numberString:
+              numberTriviaStore.trivia.number.getOrCrash().toString()));
+    }
+  }
+
+  void dispatchRandom() {
+    controller.clear();
+    numberTriviaStore.getErrorOrUseCase(const GetTriviaForRandomNumber());
+  }
+}
+ */
